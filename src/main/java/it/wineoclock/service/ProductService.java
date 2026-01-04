@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ProductService {
 
@@ -27,5 +30,12 @@ public class ProductService {
         log.info("ProductService.addProduct");
         Product entity = ProductMapper.fromDto(productDto);
         productRepo.save(entity);
+    }
+
+    public List<ProductDto> findAllProducts() {
+        log.info("ProductService.findAllProducts");
+        List<Product> products = productRepo.findAll();
+        List<ProductDto> dtoList = ProductMapper.fromEntities(products);
+        return dtoList;
     }
 }
