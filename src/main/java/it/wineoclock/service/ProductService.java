@@ -5,6 +5,7 @@ import it.wineoclock.dto.ProductDto;
 import it.wineoclock.entity.Product;
 import it.wineoclock.mappers.ProductMapper;
 import it.wineoclock.repository.ProductRepo;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -45,4 +47,29 @@ public class ProductService {
     }
 
 
+    public ProductDto update(ProductDto productDto, int id) throws Exception {
+        log.info("ProductService.update");
+        Optional<Product> productByID = productRepo.findById(id);
+        if(productByID.isEmpty()){
+            throw new Exception("product not found");
+        }
+        Product productFound = productByID.get();
+        productFound.setName(productDto.getName());
+        productFound.setProductor(productDto.getProductor());
+        productFound.setCountry(productDto.getCountry());
+        productFound.setType(productDto.getType());
+        productFound.setCapacity(productDto.getCapacity());
+
+        return ProductMapper.fromEntity(productRepo.save(productFound));
+    }
+
+    public void delete(int id) throws Exception {
+        log.info("ProductService.delete");
+        if (productRepo.existsById(id)){
+            productRepo.deleteById(id);
+        } else  {
+            throw new Exception("Invalid id");
+        }
+
+    }
 }

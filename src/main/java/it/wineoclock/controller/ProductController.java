@@ -46,6 +46,20 @@ public class ProductController {
         return  ResponseEntity.ok(productDtoList);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ProductDto> update(@RequestBody @Valid ProductDto productDto, @PathVariable(name = "id") int id) throws Exception {
+        log.info("ProductController.update - id={}",id);
+        ProductDto product = productService.update(productDto, id);
+        return ResponseEntity.ok(product);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws Exception{
+        log.info("ProductController.delete - id{}", id);
+        productService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
 
 }
