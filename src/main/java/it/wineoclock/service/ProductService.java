@@ -35,7 +35,14 @@ public class ProductService {
     public List<ProductDto> findAllProducts() {
         log.info("ProductService.findAllProducts");
         List<Product> products = productRepo.findAll();
-        List<ProductDto> dtoList = ProductMapper.fromEntities(products);
-        return dtoList;
+        return ProductMapper.fromEntities(products);
     }
+
+    public List<ProductDto> findByCountry(String countryName) {
+        log.info("ProductService.findByCountry");
+        List<Product> products = productRepo.findByCountry(countryName);
+        return ProductMapper.fromEntities(products);
+    }
+
+
 }

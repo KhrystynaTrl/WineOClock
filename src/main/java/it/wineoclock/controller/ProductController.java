@@ -39,6 +39,12 @@ public class ProductController {
         return ResponseEntity.ok(productDtoList);
     }
 
+    @GetMapping("/find-by-country/{country}")
+    public ResponseEntity<List<ProductDto>> findByCountry(@PathVariable(name = "country") String countryName){
+        log.info("ProductController.findByCountry - country= {}",countryName);
+        List<ProductDto> productDtoList = productService.findByCountry(countryName);
+        return  ResponseEntity.ok(productDtoList);
+    }
 
 
 
