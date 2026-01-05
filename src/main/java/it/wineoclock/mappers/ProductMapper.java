@@ -19,6 +19,7 @@ public class ProductMapper {
         entity.setCountry(dto.getCountry());
         entity.setName(dto.getName());
         entity.setProductor(dto.getProductor());
+        entity.setType(dto.getType());
         return entity;
     }
 
@@ -29,6 +30,7 @@ public class ProductMapper {
         dto.setCountry(entity.getCountry());
         dto.setName(entity.getName());
         dto.setProductor(entity.getProductor());
+        dto.setType(entity.getType());
         return dto;
     }
 
