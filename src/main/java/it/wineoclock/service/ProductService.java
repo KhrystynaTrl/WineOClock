@@ -3,12 +3,16 @@ package it.wineoclock.service;
 
 import it.wineoclock.dto.ProductDto;
 import it.wineoclock.entity.Product;
+import it.wineoclock.exceptions.NotFound;
+import it.wineoclock.exceptions.WineoClockException;
 import it.wineoclock.mappers.ProductMapper;
 import it.wineoclock.repository.ProductRepo;
 import jakarta.validation.Valid;
+import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +51,11 @@ public class ProductService {
     }
 
 
-    public ProductDto update(ProductDto productDto, int id) throws Exception {
+    public ProductDto update(ProductDto productDto, int id) throws NotFound {
         log.info("ProductService.update");
         Optional<Product> productByID = productRepo.findById(id);
         if(productByID.isEmpty()){
-            throw new Exception("product not found");
+            throw new NotFound("product not found");
         }
         Product productFound = productByID.get();
         productFound.setName(productDto.getName());
@@ -63,12 +67,12 @@ public class ProductService {
         return ProductMapper.fromEntity(productRepo.save(productFound));
     }
 
-    public void delete(int id) throws Exception {
+    public void delete(int id) throws NotFound {
         log.info("ProductService.delete");
         if (productRepo.existsById(id)){
             productRepo.deleteById(id);
         } else  {
-            throw new Exception("Invalid id");
+            throw new NotFound("Invalid id");
         }
 
     }

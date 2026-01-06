@@ -2,6 +2,7 @@ package it.wineoclock.controller;
 
 
 import it.wineoclock.dto.ProductDto;
+import it.wineoclock.exceptions.NotFound;
 import it.wineoclock.service.ProductService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -47,14 +48,14 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ProductDto> update(@RequestBody @Valid ProductDto productDto, @PathVariable(name = "id") int id) throws Exception {
+    public ResponseEntity<ProductDto> update(@RequestBody @Valid ProductDto productDto, @PathVariable(name = "id") int id) throws NotFound {
         log.info("ProductController.update - id={}",id);
         ProductDto product = productService.update(productDto, id);
         return ResponseEntity.ok(product);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws Exception{
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") int id) throws NotFound {
         log.info("ProductController.delete - id{}", id);
         productService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();
