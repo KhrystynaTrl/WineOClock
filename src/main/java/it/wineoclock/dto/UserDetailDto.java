@@ -2,6 +2,7 @@ package it.wineoclock.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class UserDetailDto {
     @NotBlank(message = "City mandatory" )
@@ -11,6 +12,7 @@ public class UserDetailDto {
     @Min(message = "Min number 1", value = 1)
     private int streetNumber;
     @NotBlank(message = "Zip code mandatory" )
+    @Size(message = "max size 5", max = 5)
     private String zipCode;
 
     public UserDetailDto(){}

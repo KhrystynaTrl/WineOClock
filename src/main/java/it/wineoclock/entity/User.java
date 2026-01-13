@@ -12,8 +12,8 @@ public class User {
     private String email;
     @Column(name = "password", length = 30, nullable = false)
     private String password;
-    @JoinColumn(name = "user_detail", nullable = false)
-    @OneToOne
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserDetail userDetail;
 
     public User() {
