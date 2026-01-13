@@ -13,6 +13,8 @@ import java.util.List;
 public class UserMapper {
     private static final Logger log = LoggerFactory.getLogger(UserMapper.class);
 
+
+
     public static UserDetailDto fromEntityUserDetail(UserDetail entity){
         log.info("UserMapper.fromEntityUserDetail - {}", entity);
         UserDetailDto dto = new UserDetailDto();
@@ -37,7 +39,9 @@ public class UserMapper {
         log.info("UserMapper.fromEntity - {}", entity);
         UserDto dto = new UserDto();
         dto.setEmail(entity.getEmail());
-        dto.setUserDetail(fromEntityUserDetail(entity.getUserDetail()));
+        if(entity.getUserDetail() != null){
+            dto.setUserDetail(fromEntityUserDetail(entity.getUserDetail()));
+        }
         return dto;
     }
 
@@ -46,7 +50,9 @@ public class UserMapper {
         User entity = new User();
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
-        entity.setUserDetail(fromDtoUserDetail(dto.getUserDetail()));
+        if(dto.getUserDetail() != null){
+            entity.setUserDetail(fromDtoUserDetail(dto.getUserDetail()));
+        }
         return entity;
     }
 

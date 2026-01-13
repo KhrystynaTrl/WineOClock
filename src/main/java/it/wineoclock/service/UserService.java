@@ -1,21 +1,17 @@
 package it.wineoclock.service;
 
-import it.wineoclock.dto.UserDetailDto;
 import it.wineoclock.dto.UserDto;
 import it.wineoclock.entity.User;
 import it.wineoclock.entity.UserDetail;
 import it.wineoclock.exceptions.NotFound;
 import it.wineoclock.mappers.UserMapper;
 import it.wineoclock.repository.UserRepo;
-import jakarta.validation.constraints.Min;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -30,7 +26,10 @@ public class UserService {
     public void create(UserDto userDto) {
         log.info("UserService.create - {}", userDto);
         User user = UserMapper.fromDtoUser(userDto);
-        userRepo.save(user);
+        if (user.getUserDetail() != null) {
+            user.getUserDetail().setUser(user);
+        }
+        userRepo.saveAndFlush(user);
     }
 
     public List<UserDto> findAll() {
@@ -70,10 +69,20 @@ public class UserService {
         User userFind = user.get();
         userFind.setEmail(userDto.getEmail());
         UserDetail userDetail = userFind.getUserDetail();
-        userDetail.setCity(userDto.getUserDetail().getCity());
-        userDetail.setStreet(userDto.getUserDetail().getStreet());
-        userDetail.setStreetNumber(userDto.getUserDetail().getStreetNumber());
-        userDetail.setZipCode(userDto.getUserDetail().getZipCode());
+        if(userDetail == null){
+            userDetail = new UserDetail();
+            userDetail.setUser(userFind);
+            userFind.setUserDetail(userDetail);
+        }
+
+        if (userDto.getUserDetail() != null){
+            userDetail.setCity(userDto.getUserDetail().getCity());
+            userDetail.setStreet(userDto.getUserDetail().getStreet());
+            userDetail.setStreetNumber(userDto.getUserDetail().getStreetNumber());
+            userDetail.setZipCode(userDto.getUserDetail().getZipCode());
+        } else {
+            userFind.setUserDetail(null);
+        }
         return UserMapper.fromEntityUser(userRepo.save(userFind));
     }
 }
